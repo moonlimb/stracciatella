@@ -1,0 +1,64 @@
+Use these fcns in form_test_file_creator
+
+def create_options_data(form_class, more_params, fields, tab_depth):
+
+def create_options_tuple(form_class, more_params, form_fields):
+
+***********
+
+Thoughts:
+    1. How to represent the template?
+    2. 
+
+idea 1: 
+    first look for the keyword 'class'
+
+    ** use regex validator to grab field name in between <tab>field_name<space><equal sign> **
+    - ignore any lines starting with #
+    - ignore any lines starting w/ import or from
+    - include basic imports -> unittest, mock, hamcrest, 
+
+idea 2: (test_processors)
+    - PipetteCheckForm
+    - PipetteCheckFormTest
+    - PipetteCheck (locus.lib.lims models)
+    - PipetteCheckCreator
+    - PipetteCheckCreateOptions
+    options = 
+
+    PipetteCheckCreateOptions(
+        syapse_field=cleaned_data['form_field']
+    )
+
+    pipetting_check = PipettingCheck.create(
+        datastore,
+        owner=user,
+        syapse_field=options.field,
+    )
+
+    pipetting_check.save()
+    return pipetting_check
+
+def create_pipetting_check(datastore, options):
+    #Creates and returns a sequencing run with input datastore and run options (namedtuple)
+    user = datastore.connection.retrieve_user(options.user_email)
+
+    pipetting_check = PipettingCheck.create(
+        datastore,
+        owner=user,
+        status=options.status,
+        name=options.name,
+        description=options.description,
+        run_type=options.run_type,
+        workflow=workflow,
+        on_cell_loading_concentration=options.on_cell_loading_concentration)
+
+    pipetting_check.save()
+    return pipetting_check
+
+ideas for future:
+    - detect Field types
+    - detect certain params: in particular, required=False or True
+    - include necessary import stmt
+
+
